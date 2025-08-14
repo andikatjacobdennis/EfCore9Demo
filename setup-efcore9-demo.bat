@@ -19,6 +19,7 @@ cd EfCore9Demo.App
 REM 5. Install EF Core 9 core and tools
 dotnet add package Microsoft.EntityFrameworkCore --version 9.0.0
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 9.0.0
+dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 9.0.0
 
 REM 6. Install SQL Server provider (change if using PostgreSQL/SQLite)
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0

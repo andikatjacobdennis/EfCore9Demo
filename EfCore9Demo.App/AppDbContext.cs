@@ -13,8 +13,18 @@ namespace EfCore9Demo.App
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder
-                .UseSqlServer("Server=.;Database=EfCore9DemoDb;Trusted_Connection=True;TrustServerCertificate=True;");
+            bool useInMemory = false; // toggle this
+
+            if (useInMemory)
+            {
+                optionsBuilder.UseInMemoryDatabase("EfCore9DemoInMemory");
+            }
+            else
+            {
+                optionsBuilder
+                    .UseSqlServer("Server=.;Database=EfCore9DemoDb;Trusted_Connection=True;TrustServerCertificate=True;")
+                    .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
