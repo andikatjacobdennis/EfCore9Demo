@@ -19,6 +19,7 @@ This project shows how to:
 - Seed hierarchical data (`Blog`, `BlogDetail`, `Post`, `Comment`, `Tag`)
 - Insert additional data at runtime in `Program.cs`
 - Perform CRUD operations with **eager loading** using `.Include()` and `.ThenInclude()`
+- Run with **SQL Server** _or_ **EF Core In-Memory database** (no migrations required)
 - Use the `reset-and-run-efcore9-demo.bat` script for quick, repeatable setup
 
 ---
@@ -116,9 +117,9 @@ EfCore9Demo/
 
 ---
 
-### Option A: Run with Script (Windows)
+## Running with SQL Server
 
-Run the included automation script:
+### Option A: Run with Script (Windows)
 
 ```bash
 cd EfCore9Demo
@@ -154,9 +155,48 @@ dotnet run
 
 ---
 
+## Running with In-Memory Database (No SQL Server Needed)
+
+If you want to run **without** SQL Server:
+
+1. Install the EF Core InMemory provider:
+
+```bash
+cd EfCore9Demo.App
+dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 9.0.0
+```
+
+2. In `AppDbContext.cs`, change `OnConfiguring` to:
+
+```csharp
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    bool useInMemory = true; // toggle this
+
+    if (useInMemory)
+    {
+        optionsBuilder.UseInMemoryDatabase("EfCore9DemoInMemory");
+    }
+    else
+    {
+        optionsBuilder
+            .UseSqlServer("Server=.;Database=EfCore9DemoDb;Trusted_Connection=True;TrustServerCertificate=True;")
+            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+    }
+}
+```
+
+3. Run the app directly (no migrations needed):
+
+```bash
+dotnet run --project EfCore9Demo.App
+```
+
+---
+
 ## Example Output
 
-**Expected console output after running the script:**
+**Expected console output:**
 
 ```
 Blog: Tech Insights (https://example.com)
@@ -185,7 +225,7 @@ Created: 2025-08-15 14:23:11
 
 ## Customization & Extensions
 
-* **Switch provider**: Change `UseSqlServer()` in `AppDbContext` to use SQLite, PostgreSQL, or Cosmos DB.
+* **Switch provider**: Easily change between SQL Server and In-Memory by toggling a flag in `AppDbContext`.
 * **Extend the model**: Add new entities or deeper relationships.
 * **Web API version**: Convert to Minimal API or MVC Web API with ASP.NET Core 9.
 
