@@ -99,6 +99,8 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0
 From the project directory:
 
 ```bash
+dotnet ef database drop -f
+dotnet ef migrations remove
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 dotnet run
@@ -124,4 +126,4 @@ Blog: https://example.com
 
 ## License
 
-This project is open-sourced under the [MIT License](LICENSE). Feel free to fork, customize, and contribute.
+This project is open-sourced under the [MIT License](LICENSE).
