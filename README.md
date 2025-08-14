@@ -29,7 +29,7 @@ This project shows how to:
 erDiagram
     Blog ||--o{ Post : has
     Post ||--o{ Comment : has
-    Blog ||--|| BlogDetail : "details"
+    Blog ||--|| BlogDetail : details
     Post }o--o{ Tag : tagged_with
 
     Blog {
