@@ -92,10 +92,10 @@ EfCore9Demo/
 │   │   ├── Post.cs
 │   │   ├── Comment.cs
 │   │   └── Tag.cs
-│   ├── Migrations/
-│   │   └── …migration files…
-│   ├── reset-and-run-efcore9-demo.bat
-│   └── setup-efcore9-demo.bat
+│   └── Migrations/
+│       └── …migration files…
+├── reset-and-run-efcore9-demo.bat
+└── setup-efcore9-demo.bat
 ├── README.md
 └── LICENSE (MIT)
 ```
