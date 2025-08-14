@@ -126,4 +126,4 @@ Blog: https://example.com
 
 ## License
 
-This project is open-sourced under the [MIT License](LICENSE). Feel free to fork, customize, and contribute.
+This project is open-sourced under the [MIT License](LICENSE).
