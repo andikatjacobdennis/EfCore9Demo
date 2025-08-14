@@ -14,75 +14,59 @@ class Program
     {
         using (var context = new AppDbContext())
         {
-            // Clear database for demo purposes
-            context.Database.EnsureDeleted();
+            // Ensure database exists (migrations + seeding already applied)
             context.Database.EnsureCreated();
 
-            // Create sample blog with posts and comments
-            var blog = new Blog
+            // Insert extra blog, posts, comments, and tags at runtime
+            var extraTag = new Tag { Name = "Database" };
+            var extraBlog = new Blog
             {
-                Url = "https://example.com",
-                Title = "Tech Insights",
-                OwnerName = "John Doe",
-                OwnerEmail = "john@example.com",
+                Url = "https://datainsights.com",
+                Title = "Data Insights",
+                OwnerName = "Jane Smith",
+                OwnerEmail = "jane@datainsights.com",
                 CreatedAt = DateTime.UtcNow,
+                BlogDetail = new BlogDetail
+                {
+                    Description = "Exploring data technologies and trends.",
+                    LastUpdated = DateTime.UtcNow
+                },
                 Posts = new List<Post>
                 {
                     new Post
                     {
-                        Title = "Hello EF Core 9",
-                        Content = "This is a post introducing EF Core 9.",
+                        Title = "Understanding EF Core Seeding",
+                        Content = "A guide to seeding data in EF Core with relationships.",
                         PublishedAt = DateTime.UtcNow,
-                        Rating = 4.5m,
-                        ReadTimeMinutes = 5.2,
+                        Rating = 4.8m,
+                        ReadTimeMinutes = 6.0,
                         IsPublished = true,
+                        Tags = new List<Tag> { extraTag },
                         Comments = new List<Comment>
                         {
                             new Comment
                             {
-                                AuthorName = "Alice",
-                                AuthorEmail = "alice@example.com",
-                                Text = "Nice article!",
-                                Status = CommentStatus.Approved
-                            },
-                            new Comment
-                            {
-                                AuthorName = "Bob",
-                                AuthorEmail = "bob@example.com",
-                                Text = "Very informative, thanks!",
-                                Status = CommentStatus.Approved
-                            }
-                        }
-                    },
-                    new Post
-                    {
-                        Title = "Advanced EF Core 9 Queries",
-                        Content = "A deep dive into EF Core 9's new LINQ capabilities.",
-                        PublishedAt = DateTime.UtcNow,
-                        Rating = 5.0m,
-                        ReadTimeMinutes = 8.7,
-                        IsPublished = true,
-                        Comments = new List<Comment>
-                        {
-                            new Comment
-                            {
-                                AuthorName = "Charlie",
-                                AuthorEmail = "charlie@example.com",
-                                Text = "Looking forward to trying these out!",
-                                Status = CommentStatus.Pending
+                                AuthorName = "Eve",
+                                AuthorEmail = "eve@example.com",
+                                Text = "Very helpful, thanks!",
+                                Status = CommentStatus.Approved,
+                                CreatedAt = DateTime.UtcNow
                             }
                         }
                     }
                 }
             };
 
-            context.Blogs.Add(blog);
+            context.Blogs.Add(extraBlog);
             context.SaveChanges();
 
-            // Query with eager loading
+            // Query all blogs with eager loading
             var blogs = context.Blogs
+                .Include(b => b.BlogDetail)
                 .Include(b => b.Posts)
-                .ThenInclude(p => p.Comments)
+                    .ThenInclude(p => p.Comments)
+                .Include(b => b.Posts)
+                    .ThenInclude(p => p.Tags)
                 .ToList();
 
             // Display results
@@ -92,6 +76,12 @@ class Program
                 Console.WriteLine($"Owner: {b.OwnerName} ({b.OwnerEmail})");
                 Console.WriteLine($"Created: {b.CreatedAt}");
 
+                if (b.BlogDetail != null)
+                {
+                    Console.WriteLine($"  Blog Detail: {b.BlogDetail.Description}");
+                    Console.WriteLine($"  Last Updated: {b.BlogDetail.LastUpdated}");
+                }
+
                 foreach (var p in b.Posts)
                 {
                     Console.WriteLine($"\n  Post: {p.Title}");
@@ -99,6 +89,11 @@ class Program
                     Console.WriteLine($"    Rating: {p.Rating}");
                     Console.WriteLine($"    Read Time: {p.ReadTimeMinutes} minutes");
                     Console.WriteLine($"    Published Status: {p.IsPublished}");
+
+                    if (p.Tags.Any())
+                    {
+                        Console.WriteLine($"    Tags: {string.Join(", ", p.Tags.Select(t => t.Name))}");
+                    }
 
                     foreach (var c in p.Comments)
                     {

@@ -31,6 +31,10 @@ namespace EfCore9Demo.App.models
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
 
+        public List<Tag> Tags { get; set; } = new(); // One-to-one navigation
+
         public List<Comment> Comments { get; set; } = new();
+
+
     }
 }

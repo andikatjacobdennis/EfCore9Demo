@@ -25,6 +25,8 @@ namespace EfCore9Demo.App.models
         [EmailAddress]
         public string OwnerEmail { get; set; }
 
+        public BlogDetail BlogDetail { get; set; } // One-to-one navigation
+
         public List<Post> Posts { get; set; } = new();
     }
 }
