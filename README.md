@@ -1,4 +1,4 @@
-# EfCore9Demo
+# Entity Framework Core 9 Demo
 
 **A .NET 9 + Entity Framework Core 9 sample demonstrating a three-level one-to-many relationship**:
 
