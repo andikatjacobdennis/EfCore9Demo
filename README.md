@@ -54,7 +54,8 @@ EfCore9Demo/
 - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 - **SQL Server** (modify provider for PostgreSQL, SQLite, etc.)
 - EF Core CLI tool (optional but recommended):
-  ```bash
+
+```bash
   dotnet tool install --global dotnet-ef
 ````
 
