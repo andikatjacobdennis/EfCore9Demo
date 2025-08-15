@@ -100,20 +100,20 @@ class Program
                         Console.WriteLine($"      Comment by {c.AuthorName} ({c.AuthorEmail}): {c.Text} [Status: {c.Status}]");
                     }
                 }
+            }
 
-                // Demo of raw SQL query
-                var posts = context.Posts.FromSql($"SELECT * FROM dbo.Posts").ToList();
-                Console.WriteLine("\nRaw SQL Query Results:");
-                Console.WriteLine($"Total Posts: {posts.Count}");
-                foreach (var post in posts)
-                {
-                    Console.WriteLine($"\n  Raw SQL Post: {post.Title}");
-                    Console.WriteLine($"    Content: {post.Content}");
-                    Console.WriteLine($"    Published At: {post.PublishedAt}");
-                    Console.WriteLine($"    Rating: {post.Rating}");
-                    Console.WriteLine($"    Read Time: {post.ReadTimeMinutes} minutes");
-                    Console.WriteLine($"    Is Published: {post.IsPublished}");
-                }
+            // Demo of FromSql
+            var posts = context.Posts.FromSql($"SELECT * FROM dbo.Posts").ToList();
+            Console.WriteLine("\nRaw SQL Query Results:");
+            Console.WriteLine($"Total Posts: {posts.Count}");
+            foreach (var post in posts)
+            {
+                Console.WriteLine($"\n  Raw SQL Post: {post.Title}");
+                Console.WriteLine($"    Content: {post.Content}");
+                Console.WriteLine($"    Published At: {post.PublishedAt}");
+                Console.WriteLine($"    Rating: {post.Rating}");
+                Console.WriteLine($"    Read Time: {post.ReadTimeMinutes} minutes");
+                Console.WriteLine($"    Is Published: {post.IsPublished}");
             }
         }
     }
