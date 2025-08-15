@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfCore9Demo.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250814221445_Init__344")]
-    partial class Init__344
+    [Migration("20250815011234_Init_fbfdda13-8fe8-482f-88e8-8227290183a1")]
+    partial class Init_fbfdda138fe8482f88e88227290183a1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

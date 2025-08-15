@@ -22,14 +22,8 @@ REM Step 3: Build project before migration
 echo Building project...
 dotnet build EfCore9Demo.App
 
-REM Step 4: Create a unique migration name using date-time
-for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (
-    set today=%%c%%a%%b
-)
-for /f "tokens=1-2 delims=: " %%a in ("%time%") do (
-    set now=%%a%%b
-)
-set migrationName=Init_%today%_%now%
+REM Step 4: Create a unique migration name using GUID
+for /f %%i in ('powershell -Command "[guid]::NewGuid()"') do set migrationName=Init_%%i
 
 echo Creating new migration: %migrationName%...
 dotnet ef migrations add %migrationName% -p EfCore9Demo.App
