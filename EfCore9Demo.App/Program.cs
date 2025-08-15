@@ -102,6 +102,60 @@ class Program
                 }
             }
 
+            // Delete the extra blog and its related data
+            context.Blogs.Remove(extraBlog);
+            context.SaveChanges();
+
+            // Query again to confirm deletion
+            var remainingBlogs = context.Blogs
+                .Include(b => b.BlogDetail)
+                .Include(b => b.Posts)
+                    .ThenInclude(p => p.Comments)
+                .Include(b => b.Posts)
+                    .ThenInclude(p => p.Tags)
+                .ToList();
+            Console.WriteLine("\nRemaining Blogs after deletion:");
+            foreach (var b in remainingBlogs)
+            {
+                Console.WriteLine($"- {b.Title} ({b.Url})");
+            }
+            if (!remainingBlogs.Any())
+            {
+                Console.WriteLine("No blogs remaining.");
+            }
+
+            // Update a post's rating
+            var postToUpdate = context.Posts.FirstOrDefault(p => p.Title == "Hello EF Core 9");
+            if (postToUpdate != null)
+            {
+                postToUpdate.Rating = 5.0m; // Update rating
+                context.SaveChanges();
+                Console.WriteLine($"\nUpdated Post Rating: {postToUpdate.Title} now has a rating of {postToUpdate.Rating}");
+            }
+            else
+            {
+                Console.WriteLine("\nPost not found for update.");
+            }
+            // Query the updated post
+            var updatedPost = context.Posts
+                .Include(p => p.Blog)
+                .FirstOrDefault(p => p.Title == "Hello EF Core 9");
+            if (updatedPost != null)
+            {
+                Console.WriteLine($"\nUpdated Post Details:");
+                Console.WriteLine($"  Title: {updatedPost.Title}");
+                Console.WriteLine($"  Content: {updatedPost.Content}");
+                Console.WriteLine($"  Published At: {updatedPost.PublishedAt}");
+                Console.WriteLine($"  Rating: {updatedPost.Rating}");
+                Console.WriteLine($"  Read Time: {updatedPost.ReadTimeMinutes} minutes");
+                Console.WriteLine($"  Is Published: {updatedPost.IsPublished}");
+                Console.WriteLine($"  Blog: {updatedPost.Blog.Title} ({updatedPost.Blog.Url})");
+            }
+            else
+            {
+                Console.WriteLine("\nUpdated post not found.");
+            }
+
             // Demo of FromSql
             var posts = context.Posts.FromSql($"SELECT * FROM dbo.Posts").ToList();
             Console.WriteLine("\nRaw SQL Query Results:");
