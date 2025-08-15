@@ -136,6 +136,7 @@ class Program
             {
                 Console.WriteLine("\nPost not found for update.");
             }
+
             // Query the updated post
             var updatedPost = context.Posts
                 .Include(p => p.Blog)
